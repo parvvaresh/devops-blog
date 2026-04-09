@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="وبلاگ دواپس - مقالات و راهنماهای عملی درباره دواپس، زیرساخت و مهندسی پلتفرم" />
+  <title>وبلاگ دواپس</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="site-title">وبلاگ دواپس</a>
+      <nav class="site-nav" aria-label="ناوبری اصلی">
+        <ul>
+          <li><a href="index.html" class="nav-active">خانه</a></li>
+          <li><a href="posts/index.html">مقالات</a></li>
+          <li><a href="about.html">درباره من</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="container">
+
+      <section class="hero">
+        <h1>نوشته‌هایی درباره دواپس و مهندسی پلتفرم</h1>
+        <p>راهنماهای عملی درباره CI/CD، کانتینرها، زیرساخت به‌عنوان کد، و ساخت سیستم‌های قابل اطمینان.</p>
+      </section>
+
+      <section class="post-list" aria-label="مقالات وبلاگ">
+        <article class="post-card">
+          <header class="post-header">
+            <div class="post-meta">
+              <time datetime="2026-03-27">۷ فروردین ۱۴۰۵</time>
+              <span class="post-tag">Docker</span>
+            </div>
+            <h2 class="post-title">
+              <a href="posts/docker-compose-dependency-management.html">
+                مدیریت وابستگی‌ها در Docker Compose
+              </a>
+            </h2>
+          </header>
+          <p class="post-excerpt">
+            وقتی با <code>docker compose up</code> چند سرویس را بالا می‌آوری، Compose فقط کانتینرها را
+            استارت می‌کند اما آماده شدن سرویس داخل کانتینر زمان می‌برد. در این مقاله سه روش
+            <code>depends_on</code>، <code>healthcheck</code> و <code>wait-for-it</code> را برای مدیریت
+            صحیح ترتیب راه‌اندازی سرویس‌ها بررسی می‌کنیم.
+          </p>
+          <a href="posts/docker-compose-dependency-management.html" class="read-more" aria-label="ادامه مطلب: مدیریت وابستگی‌ها در Docker Compose">ادامه مطلب &larr;</a>
+        </article>
+        <article class="post-card">
+          <header class="post-header">
+            <div class="post-meta">
+              <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+              <span class="post-tag">Docker</span>
+            </div>
+            <h2 class="post-title">
+              <a href="posts/docker-profile.html">
+                استفاده از Profiles در Docker Compose
+              </a>
+            </h2>
+          </header>
+          <p class="post-excerpt">
+            با <code>profiles</code> می‌توانی سرویس‌ها را دسته‌بندی کنی و فقط در شرایط خاص اجرا کنی. مثلاً ابزارهای debug فقط در development یا monitoring فقط در production. در این مقاله
+            نحوه استفاده از پروفایل‌ها، ترکیب چند پروفایل و الگوهای حرفه‌ای را بررسی می‌کنیم.
+          </p>
+          <a href="posts/docker-profile.html" class="read-more" aria-label="ادامه مطلب: استفاده از Profiles در Docker Compose">ادامه مطلب &larr;</a>
+        </article>
+
+
+        <article class="post-card">
+          <header class="post-header">
+            <div class="post-meta">
+              <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+              <span class="post-tag">Docker</span>
+            </div>
+            <h2 class="post-title">
+              <a href="posts/docker-network.html">
+                شبکه در Docker Compose
+              </a>
+            </h2>
+          </header>
+          <p class="post-excerpt">
+            شبکه در Docker مثل یک WiFi خصوصی برای کانتینرهاست. از مفاهیم پایه مثل hostname و ارتباط داخلی تا معماری حرفه‌ای با شبکه‌های جداگانه، alias و external networks. در این مقاله یاد می‌گیری چطور معماری امن و تمیز برای پروژه‌های واقعی بسازی.
+          </p>
+          <a href="posts/docker-network.html" class="read-more" aria-label="ادامه مطلب: شبکه در Docker Compose">ادامه مطلب &larr;</a>
+        </article>
+
+
+      </section>
+      <p class="all-posts-link">
+        <a href="posts/index.html" class="read-more" aria-label="مشاهده فهرست همه مقالات">مشاهده فهرست مقالات و جستجو &larr;</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
+    </div>
+  </footer>
+
+</body>
+</html>

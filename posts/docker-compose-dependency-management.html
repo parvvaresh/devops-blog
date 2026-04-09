@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="آموزش مدیریت وابستگی‌ها و صبر برای آماده شدن سرویس‌ها در Docker Compose با healthcheck و depends_on" />
+  <title>مدیریت وابستگی‌ها در Docker Compose | وبلاگ دواپس</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../post.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-title">وبلاگ دواپس</a>
+      <nav class="site-nav" aria-label="ناوبری اصلی">
+        <ul>
+          <li><a href="../index.html">خانه</a></li>
+          <li><a href="../posts/index.html" class="nav-active">مقالات</a></li>
+          <li><a href="../about.html">درباره من</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="container">
+
+      <article class="post-body">
+        <header class="post-heading">
+          <div class="post-meta">
+            <time datetime="2026-03-27">۷ فروردین ۱۴۰۵</time>
+            <span class="post-tag">Docker</span>
+          </div>
+          <h1>مدیریت وابستگی‌ها در Docker Compose</h1>
+        </header>
+
+        <h2>مشکل اصلی</h2>
+        <p>
+          وقتی با <code>docker compose up</code> چند سرویس را بالا می‌آوری (مثلاً API، Postgres، Redis)،
+          Compose فقط کانتینرها را استارت می‌کند اما آماده شدن سرویس داخل کانتینر زمان می‌برد.
+        </p>
+
+        <p>مثال واقعی:</p>
+        <pre><code>Postgres container started   (1s)
+Postgres ready for queries   (6s)</code></pre>
+
+        <p>اگر API در ثانیه 2 بخواهد وصل شود:</p>
+        <pre><code>connection refused</code></pre>
+
+        <p>پس باید somehow بگوییم: صبر کن تا دیتابیس واقعاً آماده شود.</p>
+
+        <h2>1. depends_on (فقط ترتیب)</h2>
+        <p>ساده‌ترین حالت:</p>
+
+        <pre><code>services:
+  api:
+    build: .
+    depends_on:
+      - db
+
+  db:
+    image: postgres</code></pre>
+
+        <p>معنی:</p>
+        <pre><code>اول db
+بعد api</code></pre>
+
+        <p>اما مشکل:</p>
+        <pre><code>db started (بله)
+db ready (خیر)</code></pre>
+
+        <p>پس <code>depends_on</code> به تنهایی کافی نیست.</p>
+
+        <h2>2. healthcheck (بگو چه زمانی آماده است)</h2>
+        <p>اینجا به Docker یاد می‌دهیم که چه زمانی سرویس واقعاً آماده است.</p>
+
+        <p>مثال برای postgres:</p>
+        <pre><code>services:
+  db:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5</code></pre>
+
+        <p>یعنی:</p>
+        <ul>
+          <li>هر 5 ثانیه چک کن</li>
+          <li>آیا postgres آماده است؟</li>
+          <li>وقتی آماده شد وضعیت می‌شود: <code>healthy</code></li>
+        </ul>
+
+        <h2>3. وصل کردن depends_on به healthcheck</h2>
+        <p>حالا می‌توانیم بگوییم: API فقط وقتی شروع شود که db سالم باشد</p>
+
+        <pre><code>services:
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]</code></pre>
+
+        <p>حالا ترتیب واقعی می‌شود:</p>
+        <pre><code>start db
+↓
+healthcheck اجرا می‌شود
+↓
+db healthy
+↓
+start api</code></pre>
+
+        <p><strong>این بهترین روش در بیشتر پروژه‌هاست.</strong></p>
+
+        <h2>4. wait-for-it (روش داخل خود برنامه)</h2>
+        <p>یک روش دیگر این است که خود برنامه صبر کند.</p>
+
+        <p>مثال:</p>
+        <pre><code>services:
+  api:
+    build: .
+    command: ["./wait-for-it.sh", "db:5432", "--", "npm", "start"]
+    depends_on:
+      - db
+
+  db:
+    image: postgres</code></pre>
+
+        <p>یعنی:</p>
+        <pre><code>اول صبر کن db:5432 باز شود
+بعد برنامه را اجرا کن</code></pre>
+
+        <p>flow:</p>
+        <pre><code>api start
+↓
+wait-for-it
+↓
+db ready
+↓
+run app</code></pre>
+
+        <footer class="post-footer">
+          <a href="../posts/index.html" class="read-more">بازگشت به همه مقالات &rarr;</a>
+        </footer>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
+    </div>
+  </footer>
+
+</body>
+</html>

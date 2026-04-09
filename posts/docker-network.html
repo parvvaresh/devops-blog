@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="آموزش کامل شبکه در Docker Compose - از مفاهیم پایه تا معماری حرفه‌ای" />
+  <title>شبکه در Docker Compose | وبلاگ دواپس</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../post.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-title">وبلاگ دواپس</a>
+      <nav class="site-nav" aria-label="ناوبری اصلی">
+        <ul>
+          <li><a href="../index.html">خانه</a></li>
+          <li><a href="../posts/index.html" class="nav-active">مقالات</a></li>
+          <li><a href="../about.html">درباره من</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="container">
+
+      <article class="post-body">
+        <header class="post-heading">
+          <div class="post-meta">
+            <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+            <span class="post-tag">Docker</span>
+          </div>
+          <h1>شبکه در Docker Compose</h1>
+        </header>
+
+        <h2>فصل 1 — شبکه در Docker چیست؟</h2>
+        <p>وقتی چند کانتینر اجرا می‌کنی، آن‌ها باید بتوانند:</p>
+        <ul>
+          <li>با هم حرف بزنند</li>
+          <li>ولی هر چیزی نباشد به هر چیزی دسترسی داشته باشد</li>
+          <li>معماری‌ات امن و تمیز باشد</li>
+        </ul>
+
+        <p>Docker دقیقاً مثل یک WiFi خصوصی برای کانتینرها شبکه ایجاد می‌کند.</p>
+
+        <p>هر کانتینر:</p>
+        <ul>
+          <li>یک IP می‌گیرد</li>
+          <li>نامش به عنوان hostname شناخته می‌شود</li>
+          <li>می‌تواند سرویس‌های دیگر را با اسمشان صدا بزند</li>
+        </ul>
+
+        <pre><code>نام سرویس = hostname = آدرس شبکه داخلی</code></pre>
+
+        <h2>فصل 2 — رفتار پیش‌فرض Compose</h2>
+        <p>اگر یک فایل Compose داشته باشی، Docker خودش یک شبکه می‌سازد:</p>
+        <pre><code>myproject_default</code></pre>
+
+        <p>و همه سرویس‌ها داخل آن هستند.</p>
+
+        <p>مثال:</p>
+        <pre><code>services:
+  api:
+    image: myapi
+  db:
+    image: postgres</code></pre>
+
+        <p>در شبکه:</p>
+        <pre><code>hostname: api → 172.x.x.x
+hostname: db  → 172.x.x.x</code></pre>
+
+        <p>در کد API:</p>
+        <pre><code>DB_HOST=db</code></pre>
+
+        <p>تمام.</p>
+        <p>هیچ port mapping داخلی لازم نیست.</p>
+
+        <h2>فصل 3 — ارتباط داخلی vs ارتباط بیرونی</h2>
+        <table>
+          <tr>
+            <th>مفهوم</th>
+            <th>توضیح</th>
+          </tr>
+          <tr>
+            <td>Network</td>
+            <td>ارتباط کانتینر ←→ کانتینر</td>
+          </tr>
+          <tr>
+            <td>Ports</td>
+            <td>ارتباط بیرون ←→ کانتینر (مثلاً مرورگر → API)</td>
+          </tr>
+        </table>
+
+        <p>یعنی:</p>
+        <pre><code>ports:
+  - "5432:5432"</code></pre>
+
+        <p>فقط دسترسی از کامپیوترت به Postgres را می‌دهد، نه دسترسی کانتینرهای دیگر.</p>
+        <p>ارتباط کانتینرها فقط و فقط از طریق network است.</p>
+
+        <h2>فصل 4 — ساختن شبکه‌های جداگانه (Isolation)</h2>
+        <p>این از مهم‌ترین بخش‌هاست.</p>
+        <p>شبیه خانه با دو منطقه:</p>
+        <ul>
+          <li>پذیرایی (مهمان فقط همین را می‌بیند)</li>
+          <li>اتاق خواب (خصوصی)</li>
+        </ul>
+
+        <p>در Docker:</p>
+        <pre><code>services:
+  nginx:
+    networks:
+      - public
+
+  api:
+    networks:
+      - public
+      - private
+
+  db:
+    networks:
+      - private
+
+networks:
+  public:
+  private:</code></pre>
+
+        <p>نتیجه:</p>
+        <pre><code>✔ nginx → api
+✘ nginx → db
+✔ api → db</code></pre>
+
+        <p>معماری استاندارد وب دقیقاً همین است.</p>
+
+        <h2>فصل 5 — Network Aliases (اسم مستعار شبکه)</h2>
+        <p>این بخش برای load balancing یا داشتن نام مشترک برای چند سرویس استفاده می‌شود.</p>
+        <p>دو API داری:</p>
+        <pre><code>services:
+  api1:
+    networks:
+      backend:
+        aliases:
+          - app
+
+  api2:
+    networks:
+      backend:
+        aliases:
+          - app
+
+networks:
+  backend:</code></pre>
+
+        <p>در شبکه Docker:</p>
+        <pre><code>app → api1
+app → api2</code></pre>
+
+        <p>یعنی اگر یک سرویس بگوید:</p>
+        <pre><code>curl http://app:3000</code></pre>
+
+        <p>Docker یکی از این دو را انتخاب می‌کند.</p>
+        <p>مثل یک دامنه:</p>
+        <pre><code>app.local → سرور A
+app.local → سرور B</code></pre>
+
+        <p>چند سرویس → یک hostname</p>
+
+        <h2>فصل 6 — اتصال کانتینرها به چند شبکه (Dual-Homed)</h2>
+        <p>گاهی یک سرویس باید روی ۲ شبکه باشد:</p>
+        <ul>
+          <li>backend (فقط برای API و DB)</li>
+          <li>monitoring (مثلاً برای Prometheus)</li>
+        </ul>
+
+        <p>مثال:</p>
+        <pre><code>services:
+  api:
+    networks:
+      - backend
+      - monitoring</code></pre>
+
+        <p>این یعنی API در هر دو شبکه عضو است و می‌تواند به هر دو گروه دسترسی داشته باشد.</p>
+        <p>این الگو برای reverse-proxy ها خیلی رایج است (nginx → frontend + backend).</p>
+
+        <h2>فصل 7 — External Networks</h2>
+        <p>وقتی دو پروژه کاملاً جدا می‌خواهند با هم حرف بزنند:</p>
+        <pre><code>docker network create sharednet</code></pre>
+
+        <p>Project A:</p>
+        <pre><code>networks:
+  sharednet:
+    external: true</code></pre>
+
+        <p>Project B:</p>
+        <pre><code>networks:
+  sharednet:
+    external: true</code></pre>
+
+        <p>الان کانتینرهای دو پروژه در یک شبکه مشترک هستند.</p>
+
+        <h2>فصل 8 — Network Modes (کم‌استفاده ولی مهم)</h2>
+        <p>سه حالت مهم:</p>
+
+        <h3>bridge (پیش‌فرض)</h3>
+        <p>جداسازی کامل بین کانتینرها</p>
+        <p>کانتینرها فقط از طریق شبکه Docker با هم حرف می‌زنند.</p>
+
+        <h3>host</h3>
+        <p>کانتینر = خود سیستم</p>
+        <p>بدون ایزوله‌سازی</p>
+        <p>پورت‌ها به اشتراک گذاشته می‌شوند</p>
+        <p>معمولاً برای Redis یا Elasticsearch که latency حساس دارند.</p>
+
+        <h3>none</h3>
+        <p>کاملاً بدون شبکه</p>
+        <p>کاملاً ایزوله</p>
+        <p>تقریباً هیچ‌وقت استفاده نمی‌شود جز امنیت شدید.</p>
+
+        <h2>فصل 9 — Debug شبکه</h2>
+        <p>دستورات مهم:</p>
+
+        <pre><code>docker network ls</code></pre>
+        <p>نمایش همه شبکه‌ها</p>
+
+        <pre><code>docker network inspect &lt;network-name&gt;</code></pre>
+        <p>نمایش لیست کانتینرهای عضو، IP ها، alias ها</p>
+
+        <pre><code>docker exec -it &lt;container&gt; sh
+ping api</code></pre>
+        <p>کانتینر به کانتینر دیگر ping می‌زند.</p>
+
+        <h2>فصل 10 — معماری شبکه حرفه‌ای برای پروژه واقعی</h2>
+        <p>یک الگوی واقعی:</p>
+        <pre><code>frontend-network:
+  nginx
+  frontend
+
+backend-network:
+  nginx
+  api
+  auth-service
+  cache
+
+private-network:
+  api
+  auth-service
+  postgres
+  redis
+
+monitor-network:
+  prometheus
+  grafana
+  exporter</code></pre>
+
+        <p>فواید:</p>
+        <ul>
+          <li>frontend نمی‌تواند مستقیم DB را ببیند</li>
+          <li>monitoring به همه چیز دسترسی دارد</li>
+          <li>API چند کانال دارد</li>
+          <li>امنیت + معماری تمیز + توسعه‌پذیری</li>
+        </ul>
+
+        <h2>در 5 خط کل روح شبکه Docker این است:</h2>
+        <ul>
+          <li>هر سرویس یک hostname است.</li>
+          <li>فقط سرویس‌هایی که در یک شبکه مشترک هستند همدیگر را می‌بینند.</li>
+          <li>ports فقط برای ارتباط با خارج از Docker هستند.</li>
+          <li>alias اجازه می‌دهد چند سرویس با یک نام دیده شوند.</li>
+          <li>با شبکه‌های جداگانه می‌توان معماری تمیز، امن و قابل توسعه ساخت.</li>
+        </ul>
+
+        <footer class="post-footer">
+          <a href="../posts/index.html" class="read-more">بازگشت به همه مقالات &rarr;</a>
+        </footer>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
+    </div>
+  </footer>
+
+</body>
+</html>

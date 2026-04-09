@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="آموزش استفاده از profiles در Docker Compose برای اجرای شرطی سرویس‌ها در محیط‌های مختلف" />
+  <title>استفاده از Profiles در Docker Compose | وبلاگ دواپس</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../post.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-title">وبلاگ دواپس</a>
+      <nav class="site-nav" aria-label="ناوبری اصلی">
+        <ul>
+          <li><a href="../index.html">خانه</a></li>
+          <li><a href="../posts/index.html" class="nav-active">مقالات</a></li>
+          <li><a href="../about.html">درباره من</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="container">
+
+      <article class="post-body">
+        <header class="post-heading">
+          <div class="post-meta">
+            <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+            <span class="post-tag">Docker</span>
+          </div>
+          <h1>استفاده از Profiles در Docker Compose</h1>
+        </header>
+
+        <p><code>profiles</code> در Docker Compose برای این است که بعضی سرویس‌ها فقط در شرایط خاص اجرا شوند.
+          یعنی لازم نیست هر بار همه سرویس‌ها بالا بیایند.
+        </p>
+
+        <p>به زبان ساده:</p>
+        <pre><code>پروفایل = دسته‌بندی سرویس‌ها برای اجراهای مختلف</code></pre>
+
+        <p>مثلاً:</p>
+        <ul>
+          <li>حالت development</li>
+          <li>حالت production</li>
+          <li>ابزارهای debug</li>
+          <li>سرویس‌های اختیاری مثل monitoring</li>
+        </ul>
+
+        <h2>ایده اصلی</h2>
+        <p>فرض کن این سرویس‌ها را داری:</p>
+        <ul>
+          <li>api</li>
+          <li>postgres</li>
+          <li>redis</li>
+          <li>adminer (UI برای دیتابیس)</li>
+          <li>prometheus (monitoring)</li>
+        </ul>
+
+        <p>در development شاید همه را بخواهی. در production شاید فقط بعضی‌ها.</p>
+        <p>اینجاست که <code>profiles</code> کمک می‌کند.</p>
+
+        <h2>مثال ساده</h2>
+        <pre><code>services:
+  api:
+    build: .
+
+  db:
+    image: postgres
+
+  adminer:
+    image: adminer
+    profiles:
+      - dev</code></pre>
+
+        <p>الان اگر بزنی:</p>
+        <pre><code>docker compose up</code></pre>
+
+        <p>فقط این‌ها بالا می‌آیند:</p>
+        <pre><code>api
+db</code></pre>
+
+        <p>چرا؟ چون <code>adminer</code> داخل پروفایل <code>dev</code> است.</p>
+
+        <p>اگر بخواهی adminer هم اجرا شود:</p>
+        <pre><code>docker compose --profile dev up</code></pre>
+
+        <p>حالا اجرا می‌شود:</p>
+        <pre><code>api
+db
+adminer</code></pre>
+
+        <h2>چند پروفایل</h2>
+        <p>مثلاً:</p>
+        <pre><code>services:
+  api:
+    build: .
+
+  db:
+    image: postgres
+
+  redis:
+    image: redis
+    profiles:
+      - cache
+
+  adminer:
+    image: adminer
+    profiles:
+      - dev</code></pre>
+
+        <p>حالا چند حالت داریم.</p>
+
+        <p>بدون پروفایل:</p>
+        <pre><code>docker compose up</code></pre>
+        <p>اجرا می‌شود: <code>api</code>, <code>db</code></p>
+
+        <p>اگر dev:</p>
+        <pre><code>docker compose --profile dev up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>adminer</code></p>
+
+        <p>اگر cache:</p>
+        <pre><code>docker compose --profile cache up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>redis</code></p>
+
+        <p>اگر چند پروفایل:</p>
+        <pre><code>docker compose --profile dev --profile cache up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>adminer</code>, <code>redis</code></p>
+
+        <h2>نکته مهم</h2>
+        <p>سرویس‌هایی که <strong>profile ندارند همیشه اجرا می‌شوند</strong>.</p>
+        <p>این خیلی مهم است.</p>
+        <p>پس معمولاً:</p>
+        <pre><code>بدون profile → core services
+با profile → optional services</code></pre>
+
+        <h2>مثال واقعی development</h2>
+        <p>یک پروژه واقعی:</p>
+        <pre><code>services:
+  api:
+    build: .
+
+  db:
+    image: postgres
+
+  redis:
+    image: redis
+
+  adminer:
+    image: adminer
+    profiles:
+      - dev
+
+  mailhog:
+    image: mailhog/mailhog
+    profiles:
+      - dev
+
+  prometheus:
+    image: prom/prometheus
+    profiles:
+      - monitoring
+
+  grafana:
+    image: grafana/grafana
+    profiles:
+      - monitoring</code></pre>
+
+        <p>حالت عادی:</p>
+        <pre><code>docker compose up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>redis</code></p>
+
+        <p>حالت dev:</p>
+        <pre><code>docker compose --profile dev up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>redis</code>, <code>adminer</code>, <code>mailhog</code></p>
+
+        <p>حالت monitoring:</p>
+        <pre><code>docker compose --profile monitoring up</code></pre>
+        <p>اجرا: <code>api</code>, <code>db</code>, <code>redis</code>, <code>prometheus</code>, <code>grafana</code></p>
+
+        <h2>یک تریک خیلی خوب</h2>
+        <p>می‌توانی profile را با env کنترل کنی.</p>
+        <p>مثلاً:</p>
+        <pre><code>COMPOSE_PROFILES=dev
+docker compose up</code></pre>
+
+        <p>یا داخل <code>.env</code></p>
+        <pre><code>COMPOSE_PROFILES=dev</code></pre>
+
+        <p>این برای تیم‌ها خیلی خوب است.</p>
+
+        <h2>فرق profiles با compose override</h2>
+        <p>خیلی‌ها این دو را قاطی می‌کنند.</p>
+        <pre><code>profiles → فعال/غیرفعال کردن سرویس
+override file → تغییر config</code></pre>
+
+        <p>مثلاً:</p>
+        <pre><code>docker-compose.yml
+docker-compose.dev.yml</code></pre>
+
+        <p>ولی <code>profiles</code> داخل یک فایل است.</p>
+
+        <h2>یک الگوی خیلی حرفه‌ای</h2>
+        <p>پروژه‌های بزرگ معمولاً این پروفایل‌ها را دارند:</p>
+        <pre><code>dev
+debug
+monitoring
+worker
+tools</code></pre>
+
+        <p>مثلاً:</p>
+        <p>tools:</p>
+        <pre><code>adminer
+pgadmin
+redis-insight</code></pre>
+
+        <p>debug:</p>
+        <pre><code>jaeger
+zipkin</code></pre>
+
+        <p>monitoring:</p>
+        <pre><code>prometheus
+grafana</code></pre>
+
+        <footer class="post-footer">
+          <a href="../posts/index.html" class="read-more">بازگشت به همه مقالات &rarr;</a>
+        </footer>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
+    </div>
+  </footer>
+
+</body>
+</html>

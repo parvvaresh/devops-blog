@@ -1,0 +1,352 @@
+/* =========================================================
+   Base & Reset
+   ========================================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:          #f9f9f7;
+  --color-surface:     #ffffff;
+  --color-border:      #e5e5e0;
+  --color-text:        #1a1a1a;
+  --color-text-muted:  #6b7280;
+  --color-accent:      #2563eb;
+  --color-accent-dark: #1d4ed8;
+  --color-tag-bg:      #eff6ff;
+  --color-tag-text:    #1d4ed8;
+
+  --font-sans: "Vazirmatn", "Tahoma", "Arial", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --width-content: 720px;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.75rem;
+  --space-xl: 3rem;
+  --radius-lg: 22px;
+  --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.06);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --shadow-glass: 0 18px 42px rgba(15, 23, 42, 0.1);
+}
+
+html {
+  font-size: 17px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(circle at 85% 0%, rgba(37, 99, 235, 0.13), transparent 30%),
+    radial-gradient(circle at 10% 100%, rgba(124, 58, 237, 0.12), transparent 28%),
+    radial-gradient(circle at 40% 35%, rgba(37, 99, 235, 0.06), transparent 34%),
+    var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.9;
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* =========================================================
+   Layout helpers
+   ========================================================= */
+.container {
+  max-width: var(--width-content);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+}
+
+/* =========================================================
+   Header & Navigation
+   ========================================================= */
+.site-header {
+  background-color: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.58);
+  padding-block: var(--space-md);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.06);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.site-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.site-title:hover {
+  color: var(--color-accent);
+}
+
+.site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding-inline: 0.6rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.site-nav a:hover {
+  color: var(--color-accent);
+  background-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   Main content
+   ========================================================= */
+.site-main {
+  padding-block: var(--space-xl);
+}
+
+/* =========================================================
+   Hero / intro
+   ========================================================= */
+.hero {
+  margin-bottom: var(--space-xl);
+  padding: 2.1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.7) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-glass);
+}
+
+.hero h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.45;
+  margin-bottom: var(--space-md);
+}
+
+.hero p {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+  max-width: 55ch;
+}
+
+/* =========================================================
+   Post list
+   ========================================================= */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* =========================================================
+   Post card
+   ========================================================= */
+.post-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-glass);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: 0 24px 46px rgba(15, 23, 42, 0.14);
+}
+
+.post-meta {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.post-meta time {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.post-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  background-color: var(--color-tag-bg);
+  color: var(--color-tag-text);
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+.post-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.55;
+  margin-bottom: var(--space-md);
+}
+
+.post-title a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.post-title a:hover {
+  color: var(--color-accent);
+}
+
+.post-excerpt {
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+  max-width: 65ch;
+}
+
+.post-excerpt code {
+  font-family: var(--font-mono);
+  font-size: 0.83em;
+  background-color: var(--color-border);
+  padding: 1px 5px;
+  border-radius: 3px;
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+.read-more {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.read-more:hover {
+  color: var(--color-accent-dark);
+  text-decoration: underline;
+  transform: translateX(-2px);
+}
+
+.all-posts-link {
+  margin-top: 2rem;
+}
+
+/* =========================================================
+   LTR override for code/tech identifiers
+   ========================================================= */
+[dir="ltr"],
+code, pre, kbd, samp {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.site-footer {
+  background-color: rgba(255, 255, 255, 0.78);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding-block: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.site-footer p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* =========================================================
+   Active nav link
+   ========================================================= */
+.site-nav a.nav-active {
+  color: var(--color-accent);
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+.site-nav a:focus-visible,
+.read-more:focus-visible {
+  outline: 2px solid rgba(37, 99, 235, 0.45);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .hero {
+    padding: 1.4rem;
+    border-radius: 20px;
+  }
+
+  .post-card {
+    border-radius: 18px;
+    padding: 1.15rem;
+  }
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+@media (max-width: 600px) {
+  html {
+    font-size: 16px;
+  }
+
+  .container {
+    padding-inline: var(--space-md);
+  }
+
+  .hero h1 {
+    font-size: 1.45rem;
+  }
+
+  .post-title {
+    font-size: 1.1rem;
+  }
+
+  .site-header .container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .site-nav ul {
+    gap: var(--space-md);
+    justify-content: center;
+  }
+}

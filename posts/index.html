@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="فهرست همه مقالات وبلاگ دواپس" />
+  <title>مقالات | وبلاگ دواپس</title>
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="posts.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../index.html" class="site-title">وبلاگ دواپس</a>
+      <nav class="site-nav" aria-label="ناوبری اصلی">
+        <ul>
+          <li><a href="../index.html">خانه</a></li>
+          <li><a href="../posts/index.html" class="nav-active">مقالات</a></li>
+          <li><a href="../about.html">درباره من</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <div class="container posts-container">
+
+      <section class="posts-hero">
+        <h1>همه مقالات</h1>
+        <p>همه نوشته‌ها را یک‌جا ببین، بین آن‌ها جستجو کن و سریع به مقاله موردنظر برس.</p>
+        <div class="posts-summary" aria-label="خلاصه مقالات">
+          <div class="summary-chip">
+            <strong>۳</strong>
+            <span>مقاله منتشرشده</span>
+          </div>
+          <div class="summary-chip">
+            <strong>Docker</strong>
+            <span>موضوع فعال</span>
+          </div>
+          <div class="summary-chip">
+            <strong>جستجوی سریع</strong>
+            <span>عنوان، متن و تگ</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="posts-toolbar" aria-label="جستجو و فیلتر مقالات">
+        <div class="search-wrapper">
+          <span class="search-icon" aria-hidden="true">&#128269;</span>
+          <input
+            type="search"
+            id="search-input"
+            class="search-input"
+            placeholder="جستجو در عنوان، توضیح یا تگ مقاله..."
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="toolbar-meta">
+          <div class="tags-filter" aria-label="فیلتر بر اساس تگ">
+            <button class="tag-btn active" data-tag="all">همه</button>
+            <button class="tag-btn" data-tag="Docker">Docker</button>
+          </div>
+          <p class="results-count" id="results-count">۳ مقاله نمایش داده می‌شود</p>
+        </div>
+      </section>
+
+      <p id="no-results" class="no-results" hidden>مقاله‌ای یافت نشد.</p>
+
+      <section class="articles-grid" id="articles-grid" aria-label="لیست مقالات">
+        <article
+          class="article-card"
+          data-tag="Docker"
+          data-title="مدیریت وابستگی‌ها در Docker Compose"
+          data-keywords="docker compose healthcheck depends_on wait-for-it کانتینر داکر"
+        >
+          <div class="card-top">
+            <div class="card-tag">Docker</div>
+            <time datetime="2026-03-27">۷ فروردین ۱۴۰۵</time>
+          </div>
+          <h2 class="card-title">
+            <a href="docker-compose-dependency-management.html">مدیریت وابستگی‌ها در Docker Compose</a>
+          </h2>
+          <p class="card-excerpt">
+            اگر چند سرویس را با Docker Compose بالا می‌آوری، فقط ترتیب اجرا کافی نیست.
+            این مقاله تفاوت بین <code>depends_on</code>، <code>healthcheck</code> و <code>wait-for-it</code>
+            را توضیح می‌دهد تا سرویس‌ها دقیقاً وقتی آماده‌اند بالا بیایند.
+          </p>
+          <ul class="card-points" aria-label="نکات مقاله">
+            <li>چرا start شدن کانتینر با ready بودن سرویس فرق دارد</li>
+            <li>بهترین روش برای صبر کردن تا آماده شدن دیتابیس</li>
+            <li>نمونه‌های واقعی برای Compose و API</li>
+          </ul>
+          <div class="card-footer">
+            <span class="reading-time">۵ دقیقه مطالعه</span>
+            <a href="docker-compose-dependency-management.html" class="card-link">مطالعه مقاله &larr;</a>
+          </div>
+        </article>
+
+        <article
+          class="article-card"
+          data-tag="Docker"
+          data-title="استفاده از Profiles در Docker Compose"
+          data-keywords="docker compose profiles dev production monitoring پروفایل داکر"
+        >
+          <div class="card-top">
+            <div class="card-tag">Docker</div>
+            <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+          </div>
+          <h2 class="card-title"><a href="docker-profile.html">استفاده از Profiles در Docker Compose</a>
+          </h2>
+          <p class="card-excerpt">
+            با <code>profiles</code> می‌توانی سرویس‌ها را دسته‌بندی کنی و فقط در شرایط خاص اجرا کنی.
+            این مقاله نحوه استفاده از پروفایل‌ها برای جداسازی محیط‌های dev، monitoring و production
+            را با مثال‌های واقعی توضیح می‌دهد.
+          </p>
+          <ul class="card-points" aria-label="نکات مقاله">
+            <li>چرا همیشه نیازی به اجرای همه سرویس‌ها نیست</li>
+            <li>نحوه ترکیب چند پروفایل با هم</li>
+            <li>الگوهای حرفه‌ای برای پروژه‌های بزرگ</li>
+          </ul>
+          <div class="card-footer">
+            <span class="reading-time">۴ دقیقه مطالعه</span>
+            <a href="docker-profile.html" class="card-link">مطالعه مقاله &larr;</a>
+          </div>
+        </article>
+
+        <article
+          class="article-card"
+          data-tag="Docker"
+          data-title="شبکه در Docker Compose"
+          data-keywords="docker compose network شبکه داکر isolation alias external networks"
+        >
+          <div class="card-top">
+            <div class="card-tag">Docker</div>
+            <time datetime="2026-03-28">۸ فروردین ۱۴۰۵</time>
+          </div>
+          <h2 class="card-title">
+            <a href="docker-network.html">شبکه در Docker Compose</a>
+          </h2>
+          <p class="card-excerpt">
+            شبکه در Docker مثل یک WiFi خصوصی برای کانتینرهاست. این مقاله از مفاهیم پایه مثل
+            hostname و ارتباط داخلی تا معماری حرفه‌ای با شبکه‌های جداگانه، alias و external networks
+            را با مثال‌های واقعی توضیح می‌دهد.
+          </p>
+          <ul class="card-points" aria-label="نکات مقاله">
+            <li>تفاوت network و ports در Docker</li>
+            <li>ساخت شبکه‌های جداگانه برای امنیت بیشتر</li>
+            <li>معماری شبکه حرفه‌ای برای پروژه‌های واقعی</li>
+          </ul>
+          <div class="card-footer">
+            <span class="reading-time">۸ دقیقه مطالعه</span>
+            <a href="docker-network.html" class="card-link">مطالعه مقاله &larr;</a>
+          </div>
+        </article>
+
+      </section>
+
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var input = document.getElementById('search-input');
+      var grid = document.getElementById('articles-grid');
+      var cards = grid.querySelectorAll('.article-card');
+      var noResults = document.getElementById('no-results');
+      var tagBtns = document.querySelectorAll('.tag-btn');
+      var resultsCount = document.getElementById('results-count');
+      var activeTag = 'all';
+
+      function filterCards() {
+        var query = input.value.trim().toLowerCase();
+        var visibleCount = 0;
+
+        cards.forEach(function (card) {
+          var title = (card.getAttribute('data-title') || '').toLowerCase();
+          var tag = (card.getAttribute('data-tag') || '').toLowerCase();
+          var keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+          var excerpt = (card.querySelector('.card-excerpt') || {}).textContent || '';
+          excerpt = excerpt.toLowerCase();
+
+          var matchesSearch =
+            !query ||
+            title.indexOf(query) !== -1 ||
+            tag.indexOf(query) !== -1 ||
+            keywords.indexOf(query) !== -1 ||
+            excerpt.indexOf(query) !== -1;
+          var matchesTag = activeTag === 'all' || tag === activeTag.toLowerCase();
+
+          if (matchesSearch && matchesTag) {
+            card.style.display = '';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        noResults.hidden = visibleCount > 0;
+        resultsCount.textContent = visibleCount + ' مقاله نمایش داده می‌شود';
+      }
+
+      input.addEventListener('input', filterCards);
+
+      tagBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          tagBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          activeTag = btn.getAttribute('data-tag');
+          filterCards();
+        });
+      });
+
+      filterCards();
+    })();
+  </script>
+
+</body>
+</html>
