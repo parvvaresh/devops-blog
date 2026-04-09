@@ -207,3 +207,27 @@
     padding: 1rem;
   }
 }
+
+html[data-theme="dark"] .post-body {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(100, 116, 139, 0.35);
+  box-shadow: 0 24px 58px rgba(2, 6, 23, 0.42);
+}
+
+html[data-theme="dark"] .post-body code {
+  background-color: var(--code-inline-bg);
+  color: var(--code-inline-text);
+}
+
+html[data-theme="dark"] .post-body th {
+  background: rgba(30, 41, 59, 0.9);
+}
+
+html[data-theme="dark"] .post-footer .read-more {
+  background: rgba(30, 41, 59, 0.82);
+  border-color: rgba(100, 116, 139, 0.35);
+}
+
+html[data-theme="dark"] .post-footer .read-more:hover {
+  background: rgba(51, 65, 85, 0.9);
+}

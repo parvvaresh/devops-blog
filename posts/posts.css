@@ -391,3 +391,40 @@
     transform: none;
   }
 }
+
+html[data-theme="dark"] .posts-hero {
+  border-color: rgba(100, 116, 139, 0.35);
+  background:
+    radial-gradient(circle at top right, rgba(37, 99, 235, 0.22), transparent 36%),
+    radial-gradient(circle at bottom left, rgba(124, 58, 237, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(17, 24, 39, 0.8) 100%);
+  box-shadow: 0 22px 56px rgba(2, 6, 23, 0.4);
+}
+
+html[data-theme="dark"] .summary-chip,
+html[data-theme="dark"] .toolbar-meta,
+html[data-theme="dark"] .search-input,
+html[data-theme="dark"] .tag-btn,
+html[data-theme="dark"] .no-results,
+html[data-theme="dark"] .article-card {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(100, 116, 139, 0.35);
+  box-shadow: 0 16px 36px rgba(2, 6, 23, 0.3);
+}
+
+html[data-theme="dark"] .search-input {
+  color: var(--color-text);
+}
+
+html[data-theme="dark"] .search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+html[data-theme="dark"] .tag-btn.active {
+  color: #dbeafe;
+}
+
+html[data-theme="dark"] .card-excerpt code {
+  background-color: var(--code-inline-bg);
+  color: var(--code-inline-text);
+}

@@ -12,13 +12,19 @@
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="site-title">وبلاگ دواپس</a>
-      <nav class="site-nav" aria-label="ناوبری اصلی">
-        <ul>
-          <li><a href="index.html" class="nav-active">خانه</a></li>
-          <li><a href="posts/index.html">مقالات</a></li>
-          <li><a href="about.html">درباره من</a></li>
-        </ul>
-      </nav>
+      <div class="header-actions">
+        <nav class="site-nav" aria-label="ناوبری اصلی">
+          <ul>
+            <li><a href="index.html" class="nav-active">خانه</a></li>
+            <li><a href="posts/index.html">مقالات</a></li>
+            <li><a href="about.html">درباره من</a></li>
+          </ul>
+        </nav>
+        <button type="button" class="theme-toggle" aria-label="تغییر تم" aria-pressed="false">
+          <span class="theme-toggle-icon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle-text">دارک</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -102,6 +108,8 @@
       <p>&#169; ۱۴۰۵ وبلاگ دواپس &mdash; علیرضا پرورش</p>
     </div>
   </footer>
+
+  <script src="theme.js"></script>
 
 </body>
 </html>
